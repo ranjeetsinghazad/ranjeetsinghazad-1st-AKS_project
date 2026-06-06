@@ -28,6 +28,10 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.5.0
+          terraform_wrapper: false
+
+      - name: Verify Terraform
+        run: terraform -version
 
       - name: Terraform Format
         run: terraform fmt -check -recursive
