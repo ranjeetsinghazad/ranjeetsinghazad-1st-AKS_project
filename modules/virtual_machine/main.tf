@@ -1,12 +1,12 @@
 resource "azurerm_linux_virtual_machine" "vm" {
   for_each = var.virtual_machines
 
-  name                = each.key
-  resource_group_name = each.value.resource_group_name
-  location            = each.value.location
-  size                = each.value.size
-  admin_username      = each.value.admin_username
-  admin_password      = each.value.admin_password
+  name                            = each.key
+  resource_group_name             = each.value.resource_group_name
+  location                        = each.value.location
+  size                            = each.value.size
+  admin_username                  = each.value.admin_username
+  admin_password                  = each.value.admin_password
   disable_password_authentication = false # Only for demo purposes
 
   network_interface_ids = [
@@ -34,11 +34,11 @@ resource "azurerm_managed_disk" "data_disk" {
     for disk in flatten([
       for vm_key, vm in var.virtual_machines : [
         for disk_key, disk in vm.data_disks : {
-          vm_key    = vm_key
-          disk_key  = disk_key
-          config    = disk
-          location  = vm.location
-          rg_name   = vm.resource_group_name
+          vm_key   = vm_key
+          disk_key = disk_key
+          config   = disk
+          location = vm.location
+          rg_name  = vm.resource_group_name
         }
       ]
     ]) : "${disk.vm_key}-${disk.disk_key}" => disk
